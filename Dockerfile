@@ -1,4 +1,4 @@
-# Stage 1: Build the application
+# Stage 1: Build
 FROM maven:3.9.9-eclipse-temurin-21 AS build
 
 WORKDIR /app
@@ -6,9 +6,11 @@ WORKDIR /app
 COPY pom.xml .
 COPY src ./src
 
-RUN mvn clean package -DskipTests
+RUN mvn -B -ntp 
+    -Dmaven.wagon.http.retryHandler.count=5 
+    clean package -DskipTests
 
-# Stage 2: Run the application
+# Stage 2: Run
 FROM eclipse-temurin:21-jre
 
 WORKDIR /app
